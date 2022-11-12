@@ -115,13 +115,13 @@ def load_coco_dataset(config, batch_size, augmentation=False, ann_dir=None, ann_
     dataset = dataset.map(lambda idx: processing.numpy_fc(
         idx, get_coco_from_id, outputs_types=outputs_types, coco=coco, augmentation=augmentation, config=config, img_dir=img_dir)
     , num_parallel_calls=tf.data.experimental.AUTOTUNE)
-    # dataset = dataset.filter(lambda imgs, tbbox, tclass, iscrowd: tf.shape(tbbox)[0] > 0 and iscrowd != 1)
-    # dataset = dataset.map(lambda imgs, tbbox, tclass, iscrowd: (imgs, tbbox, tclass), num_parallel_calls=tf.data.experimental.AUTOTUNE)
+    dataset = dataset.filter(lambda imgs, tbbox, tclass, iscrowd: tf.shape(tbbox)[0] > 0 and iscrowd != 1)
+    dataset = dataset.map(lambda imgs, tbbox, tclass, iscrowd: (imgs, tbbox, tclass), num_parallel_calls=tf.data.experimental.AUTOTUNE)
     
-    # # Pad bbox and labels
-    # dataset = dataset.map(processing.pad_labels, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+    # Pad bbox and labels
+    dataset = dataset.map(processing.pad_labels, num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
-    # dataset = dataset.batch(batch_size, drop_remainder=False)
-    # dataset = dataset.prefetch(32)
-    
+    dataset = dataset.batch(batch_size, drop_remainder=False)
+    dataset = dataset.prefetch(32)
+
     return dataset, class_names
