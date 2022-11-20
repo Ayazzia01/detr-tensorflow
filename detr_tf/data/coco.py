@@ -121,7 +121,7 @@ def load_coco_dataset(config, batch_size, augmentation=False, ann_dir=None, ann_
     # Pad bbox and labels
     dataset = dataset.map(processing.pad_labels, num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
-    dataset = dataset.batch(batch_size, drop_remainder=True)
+    dataset = dataset.batch(batch_size, drop_remainder=False)
     dataset = dataset.prefetch(32)
     
     return dataset, class_names
