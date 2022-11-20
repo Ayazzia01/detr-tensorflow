@@ -123,5 +123,5 @@ def load_coco_dataset(config, batch_size, augmentation=False, ann_dir=None, ann_
 
     dataset = dataset.batch(batch_size, drop_remainder=False)
     dataset = dataset.prefetch(32)
-    
+
     return dataset, class_names
